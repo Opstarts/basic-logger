@@ -2,8 +2,9 @@
 /* eslint no-console:0 */
 'use strict';
 
-const rollbarToken = Meteor.settings && Meteor.settings.Rollbar &&
-  Meteor.settings.Rollbar.post_server_item;
+const rollbarToken = Meteor.settings &&
+  Meteor.settings.public && Meteor.settings.public.Rollbar &&
+  Meteor.settings.public.Rollbar.post_client_item;
 
 const environment = Meteor.settings && Meteor.settings.public &&
   Meteor.settings.public.environment;
@@ -21,7 +22,7 @@ Tracker.autorun(function() {
   const userId = Meteor.userId();
   const user = Meteor.users.findOne({ _id: userId, }, { fields: { username: 1 } });
   if (user) {
-    rollbarConfig.person = {
+    rollbarConfig.payload.person = {
       id: user._id,
       username: user.username
     };
