@@ -2,13 +2,13 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.3",
+  version: "1.0.4",
   name: 'andylash:basic-logger',
 });
 
 Package.onUse(function(api) {
-  api.versionsFrom('METEOR@1.0');
-  api.use('grigio:babel@0.1.8', ['client', 'server']);
+  api.versionsFrom('METEOR@1.2');
+  api.use('ecmascript', ['client', 'server']);
   api.use(['cosmos:browserify@0.5.1'], 'client');
   api.use('tracker', 'client');
 
@@ -22,11 +22,11 @@ Package.onUse(function(api) {
   });
 
   api.addFiles('client.browserify.js', 'client');
-  api.addFiles('rollbar.es6', 'client');
-  api.addFiles('logger_base.es6', ['client', 'server']);
+  api.addFiles('rollbar.js', 'client');
+  api.addFiles('logger_base.js', ['client', 'server']);
 
-  api.addFiles('logger_server.es6', 'server');
-  api.addFiles('logger_client.es6', 'client');
+  api.addFiles('logger_server.js', 'server');
+  api.addFiles('logger_client.js', 'client');
 
 
   api.export('logger', ['client', 'server']);
