@@ -1,8 +1,8 @@
 /* global Logger:true */
 /* eslint strict:0, no-console:0 */
 
-const LOG = Symbol();
-const TIMERS = Symbol();
+const LOG = '_log'; // Symbol();
+const TIMERS = '_timers'; // Symbol();
 
 Logger = class Logger {
   constructor(log) {
