@@ -2,7 +2,7 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.11",
+  version: "1.0.13",
   name: 'andylash:basic-logger',
 });
 
@@ -19,9 +19,10 @@ Npm.depends({
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.2');
   api.use('ecmascript');
-  api.use(['cosmos:browserify@0.7.0'], 'client');
+  api.use(['cosmos:browserify@=0.7.1'], 'client');
   api.use('tracker', 'client');
 
+  api.addFiles('rollbar.nojson-1.6.1.min.js', 'client');
   api.addFiles('client.browserify.js', 'client');
   api.addFiles('rollbar.js', 'client');
   api.addFiles('logger_base.js', ['client', 'server']);

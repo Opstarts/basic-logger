@@ -1,6 +1,6 @@
 var RotatingFileStream = null; // see: https://github.com/trentm/node-bunyan/issues/223
 bunyan = require('bunyan');
-rollbar = require('../../rollbar.umd.nojson-1.6.1.min');
+//rollbar = require('../../rollbar.umd.nojson-1.6.1.min');
 
 require('core-js/modules/es5');
 require('core-js/modules/es6.symbol');

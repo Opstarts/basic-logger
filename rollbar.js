@@ -16,7 +16,8 @@ const rollbarConfig = {
     environment: environment,
   }
 };
-Rollbar = rollbar.init(rollbarConfig);
+
+window.Rollbar.init(rollbarConfig);
 
 Tracker.autorun(function() {
   const userId = Meteor.userId();
@@ -27,6 +28,8 @@ Tracker.autorun(function() {
       username: user.username
     };
     console.log(`User changed, configuring rollbar with ${user._id} and ${user.username}`);
-    Rollbar.configure(rollbarConfig);
+    window.Rollbar.configure(rollbarConfig);
   }
 });
+
+Rollbar = window.Rollbar;
