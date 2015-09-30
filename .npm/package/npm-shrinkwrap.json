@@ -244,9 +244,6 @@
           "version": "1.2.1"
         }
       }
-    },
-    "rollbar-browser": {
-      "version": "1.5.0"
     }
   }
 }
