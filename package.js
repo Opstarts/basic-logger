@@ -13,7 +13,6 @@ Npm.depends({
   'bunyan-prettystream': '0.1.3',
   'rollbar': '0.5.8',
   'core-js': '1.2.0',
-  'rollbar-browser': '1.5.0'
 });
 
 
