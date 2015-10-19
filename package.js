@@ -2,12 +2,12 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.13",
+  version: "1.0.15",
   name: 'andylash:basic-logger',
 });
 
 Npm.depends({
-  bunyan: '1.4.0',
+  'bunyan': '1.4.0',
   'bunyan-loggly': '0.0.5',
   'bunyan-format': '0.2.1',
   'bunyan-prettystream': '0.1.3',
@@ -19,10 +19,10 @@ Npm.depends({
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.2');
   api.use('ecmascript');
-  api.use(['cosmos:browserify@=0.7.1'], 'client');
+  api.use(['cosmos:browserify@0.8.0'], 'client');
   api.use('tracker', 'client');
 
-  api.addFiles('rollbar.nojson-1.6.1.min.js', 'client');
+  api.addFiles('rollbar.nojson-1.7.2.js', 'client');
   api.addFiles('client.browserify.js', 'client');
   api.addFiles('rollbar.js', 'client');
   api.addFiles('logger_base.js', ['client', 'server']);

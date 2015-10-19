@@ -29,8 +29,10 @@ const LoggerClient = class LoggerClient extends Logger {
   error(msg, err) {
     if (_.isObject(msg)) {
       Rollbar.error(msg.msg, msg.err);
-    } else {
+    } else if (err) {
       Rollbar.error(msg, err);
+    } else {
+      Rollbar.error(msg);
     }
     super.error(msg, err);
   }
