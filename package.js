@@ -2,17 +2,17 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.18",
+  version: "1.0.19",
   name: 'andylash:basic-logger',
 });
 
 Npm.depends({
-  'bunyan': '1.5.1',
+  'bunyan': '1.4.0',
   'bunyan-loggly': '0.0.5',
   'bunyan-format': '0.2.1',
   'bunyan-prettystream': '0.1.3',
   'rollbar': '0.5.10',
-  'core-js': '1.2.6',
+  'core-js': '1.2.0',
 });
 
 
