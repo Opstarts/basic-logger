@@ -9,31 +9,22 @@ const bformat = Npm.require('bunyan-format');
 const formatOut = bformat({
   outputMode: 'short'
 });
-const BunyanPrettyStream = Npm.require('bunyan-prettystream');
-const prettyStream = new BunyanPrettyStream(process.stdout);
+// const BunyanPrettyStream = Npm.require('bunyan-prettystream');
+// const prettyStream = new BunyanPrettyStream(process.stdout);
+const enviroment = Meteor.settings && Meteor.settings.public && Meteor.settings.public.environment;
 
-
-const streams = [];
-if (process.stdout.isTTY) {
-  streams.push({
-    stream: prettyStream,
-    level: 'trace',
-    type: 'raw'
-  });
-} else {
-  streams.push({
-    stream: formatOut,
-    level: 'trace',
-  });
-}
+const streams = [{
+  stream: formatOut,
+  level: 'trace',
+}];
 
 const logglyInfo = Meteor.settings && Meteor.settings.Loggly;
 if (logglyInfo) {
   streams.push({
     type: 'raw',
     stream: new Bunyan2Loggly({
-      token: logglyInfo.token, // "30523901-937b-4959-82c2-8a1b4d08aa30",
-      subdomain: logglyInfo.subdomain, //"opstarts"
+      token: logglyInfo.token,
+      subdomain: logglyInfo.subdomain,
     }, LOGGLY_BUFFERING)
   });
 }
@@ -59,7 +50,7 @@ if (rollbarToken) {
 log = bunyan.createLogger({
   name: "Default",
   //src is very expensive, don't use on prod
-  src: !!(Meteor.settings && Meteor.settings.public && Meteor.settings.public.environment !== 'production'),
+  src: !!(enviroment !== 'production'),
   streams: streams,
 });
 
@@ -93,3 +84,4 @@ if (Rollbar) {
 } else {
   logger = new Logger(log);
 }
+
