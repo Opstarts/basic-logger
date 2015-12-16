@@ -2,7 +2,7 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.16",
+  version: "1.0.17",
   name: 'andylash:basic-logger',
 });
 

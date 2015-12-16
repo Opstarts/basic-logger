@@ -6,15 +6,22 @@ const LOGGLY_BUFFERING = 1; //1 means send every message as it comes
 const bunyan = Npm.require('bunyan');
 const Bunyan2Loggly = Npm.require('bunyan-loggly').Bunyan2Loggly;
 const bformat = Npm.require('bunyan-format');
-const formatOut = bformat({
-  outputMode: 'short'
+const formatOutConsole = bformat({
+  outputMode: 'short',
+  color: true
 });
+const formatOutServer = bformat({
+  outputMode: 'short',
+  color: false
+});
+
+
 // const BunyanPrettyStream = Npm.require('bunyan-prettystream');
 // const prettyStream = new BunyanPrettyStream(process.stdout);
-const enviroment = Meteor.settings && Meteor.settings.public && Meteor.settings.public.environment;
+const environment = Meteor.settings && Meteor.settings.public && Meteor.settings.public.environment;
 
 const streams = [{
-  stream: formatOut,
+  stream: environment === 'development' ? formatOutConsole : formatOutServer,
   level: 'trace',
 }];
 
@@ -30,8 +37,7 @@ if (logglyInfo) {
 }
 
 const rollbarToken = Meteor.settings && Meteor.settings.Rollbar && Meteor.settings.Rollbar.post_server_item;
-const environment = Meteor.settings && Meteor.settings.public &&
-  Meteor.settings.public.environment;
+
 let Rollbar;
 if (rollbarToken) {
   Rollbar = Npm.require('rollbar');
@@ -50,7 +56,7 @@ if (rollbarToken) {
 log = bunyan.createLogger({
   name: "Default",
   //src is very expensive, don't use on prod
-  src: !!(enviroment !== 'production'),
+  src: !!(environment !== 'production'),
   streams: streams,
 });
 
