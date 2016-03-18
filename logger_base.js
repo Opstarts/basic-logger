@@ -52,7 +52,7 @@ Logger = class Logger {
       this[TIMERS].delete(existing);
       const msg = `${key}: ${diff}ms`;
       if (_.isObject(obj)) {
-        this.info(obj, msg);
+        this.info(_.defaults({ msg }, obj));
       } else {
         this.info(msg);
       }

@@ -2,7 +2,7 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "1.0.20",
+  version: "1.0.21",
   name: 'andylash:basic-logger',
 });
 
@@ -18,7 +18,7 @@ Npm.depends({
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.2.1');
   api.use('ecmascript');
-  api.use('ecmascript-runtime');
+  api.use('underscore');
   api.use(['cosmos:browserify@0.9.2'], 'client');
   api.use('tracker', 'client');
 
