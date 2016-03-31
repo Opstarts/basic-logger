@@ -1,11 +1,18 @@
-/* global logger:true, Rollbar:true, Logger */
-"use strict";
+/* eslint strict:0 */
+import os from 'os';
+
+import { Meteor } from 'meteor/meteor';
+
+import bunyan from 'bunyan';
+import Bunyan2Loggly from 'bunyan-loggly';
+import bformat from 'bunyan-format';
+import Rollbar from 'rollbar';
+
+import Logger from '../Logger';
 
 let log;
+let logger;
 const LOGGLY_BUFFERING = 1; //1 means send every message as it comes
-const bunyan = Npm.require('bunyan');
-const Bunyan2Loggly = Npm.require('bunyan-loggly').Bunyan2Loggly;
-const bformat = Npm.require('bunyan-format');
 const formatOutConsole = bformat({
   outputMode: 'short',
   color: true
@@ -38,10 +45,7 @@ if (logglyInfo) {
 
 const rollbarToken = Meteor.settings && Meteor.settings.Rollbar && Meteor.settings.Rollbar.post_server_item;
 
-let Rollbar;
 if (rollbarToken) {
-  Rollbar = Npm.require('rollbar');
-  const os = Npm.require('os');
   const hostname = os.hostname();
 
   Rollbar.init(rollbarToken, {
@@ -64,7 +68,7 @@ log.level("debug"); //set debug as standard level
 
 
 if (Rollbar) {
-  const LoggerServer = class LoggerServer extends Logger {
+  class LoggerServer extends Logger {
     error(msg, err) {
       let m = msg;
       let e = err;
@@ -85,9 +89,11 @@ if (Rollbar) {
       }
       super.error(msg, err);
     }
-  };
+  }
+
   logger = new LoggerServer(log);
 } else {
   logger = new Logger(log);
 }
 
+export { logger };

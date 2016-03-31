@@ -1,10 +1,9 @@
-/* global Logger:true */
-/* eslint strict:0, no-console:0 */
+/* eslint strict:0 no-console:0 */
 
 const LOG = Symbol();
 const TIMERS = Symbol();
 
-Logger = class Logger {
+class Logger {
   constructor(log) {
     log.level("debug"); //set debug as standard level
     this[TIMERS] = new Map();
@@ -69,4 +68,6 @@ Logger = class Logger {
     return this[LOG].level(val);
   }
 };
+
+export default Logger;
 

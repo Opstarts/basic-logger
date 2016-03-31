@@ -1,0 +1,26 @@
+{
+  "name": "@opstarts/basic-logger",
+  "version": "1.0.0",
+  "description": "Not ready for prime time",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Opstarts/basic-logger.git"
+  },
+  "author": "billyvg@gmail.com",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Opstarts/basic-logger/issues"
+  },
+  "homepage": "https://github.com/Opstarts/basic-logger#readme",
+  "dependencies": {
+    "browser-bunyan": "^0.2.3",
+    "bunyan": "^1.8.0",
+    "bunyan-format": "^0.2.1",
+    "bunyan-loggly": "^1.0.0",
+    "rollbar": "^0.5.16"
+  }
+}
