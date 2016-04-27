@@ -1,4 +1,5 @@
 /* eslint strict:0 no-console:0 */
+import _ from 'lodash';
 
 const LOG = Symbol();
 const TIMERS = Symbol();
@@ -70,4 +71,3 @@ class Logger {
 };
 
 export default Logger;
-

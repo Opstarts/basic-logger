@@ -6,6 +6,15 @@ Package.describe({
   name: 'andylash:basic-logger',
 });
 
+Npm.depends({
+  "browser-bunyan": "0.2.3",
+  "bunyan": "1.8.0",
+  "bunyan-format": "0.2.1",
+  "bunyan-loggly": "1.0.0",
+  "lodash": "3.10.1",
+  "rollbar": "0.5.16"
+});
+
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.3');
   api.use('ecmascript');
