@@ -79,5 +79,3 @@ export {
   logger,
   Rollbar,
 };
-
-

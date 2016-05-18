@@ -3,6 +3,7 @@ import os from 'os';
 
 import { Meteor } from 'meteor/meteor';
 
+import _ from 'lodash';
 import bunyan from 'bunyan';
 import Bunyan2Loggly from 'bunyan-loggly';
 import bformat from 'bunyan-format';
@@ -10,7 +11,6 @@ import Rollbar from 'rollbar';
 
 import Logger from '../Logger';
 
-let log;
 let logger;
 const LOGGLY_BUFFERING = 1; //1 means send every message as it comes
 const formatOutConsole = bformat({
@@ -52,12 +52,11 @@ if (rollbarToken) {
     environment: environment,
     endpoint: "https://api.rollbar.com/api/1/",
     host: hostname,
-    verbose: false
+    verbose: true,
   });
-  Rollbar.handleUncaughtExceptions(rollbarToken);
 }
 
-log = bunyan.createLogger({
+const log = bunyan.createLogger({
   name: "Default",
   //src is very expensive, don't use on prod
   src: !!(environment !== 'production'),
@@ -97,3 +96,4 @@ if (Rollbar) {
 }
 
 export { logger };
+

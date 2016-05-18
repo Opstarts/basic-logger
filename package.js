@@ -2,7 +2,7 @@
 
 Package.describe({
   summary: "Basic Logger",
-  version: "2.0.0",
+  version: "2.0.1",
   name: 'andylash:basic-logger',
 });
 
@@ -12,7 +12,7 @@ Npm.depends({
   "bunyan-format": "0.2.1",
   "bunyan-loggly": "1.0.0",
   "lodash": "3.10.1",
-  "rollbar": "0.5.16"
+  "rollbar": "0.6.0"
 });
 
 Package.onUse(function(api) {
