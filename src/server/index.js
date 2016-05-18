@@ -54,6 +54,10 @@ if (rollbarToken) {
     host: hostname,
     verbose: true,
   });
+
+  if (environment === 'production') {
+    Rollbar.handleUncaughtExceptions(rollbarToken);
+  }
 }
 
 const log = bunyan.createLogger({
