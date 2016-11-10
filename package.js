@@ -1,8 +1,6 @@
-"use strict";
-
 Package.describe({
   summary: "Basic Logger",
-  version: "2.0.1",
+  version: "2.0.3",
   name: 'andylash:basic-logger',
 });
 
