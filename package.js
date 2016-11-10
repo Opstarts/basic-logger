@@ -12,7 +12,7 @@ Npm.depends({
   "bunyan-format": "0.2.1",
   "bunyan-loggly": "1.0.0",
   "lodash": "3.10.1",
-  "rollbar": "0.6.0"
+  "rollbar": "0.6.2"
 });
 
 Package.onUse(function(api) {
