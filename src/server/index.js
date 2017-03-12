@@ -7,7 +7,7 @@ import _ from 'lodash';
 import bunyan from 'bunyan';
 import Bunyan2Loggly from 'bunyan-loggly';
 import bformat from 'bunyan-format';
-import Rollbar from 'rollbar';
+import Raven from 'raven';
 
 import Logger from '../Logger';
 
@@ -43,21 +43,20 @@ if (logglyInfo) {
   });
 }
 
-const rollbarToken = Meteor.settings && Meteor.settings.Rollbar && Meteor.settings.Rollbar.post_server_item;
+// Raven
+const sentryToken = Meteor.settings &&
+  Meteor.settings.Sentry &&
+  Meteor.settings.Sentry.config;
 
-if (rollbarToken) {
+if (sentryToken) {
   const hostname = os.hostname();
 
-  Rollbar.init(rollbarToken, {
-    environment: environment,
-    endpoint: "https://api.rollbar.com/api/1/",
-    host: hostname,
-    verbose: true,
-  });
-
-  if (environment === 'production') {
-    Rollbar.handleUncaughtExceptions(rollbarToken);
-  }
+  Raven.config(sentryToken, {
+    environment,
+    extra: {
+      host: hostname,
+    },
+  }).install();
 }
 
 const log = bunyan.createLogger({
@@ -70,7 +69,7 @@ const log = bunyan.createLogger({
 log.level("debug"); //set debug as standard level
 
 
-if (Rollbar) {
+if (Raven) {
   class LoggerServer extends Logger {
     error(msg, err) {
       let m = msg;
@@ -81,14 +80,15 @@ if (Rollbar) {
       }
 
       if (e) {
-        Rollbar.handleErrorWithPayloadData(e, {
-          level: "error",
-          custom: {
+        Raven.captureException(e, {
+          extra: {
             message: m
           }
         });
       } else {
-        Rollbar.reportMessage(m, "error");
+        Raven.captureMessage(m, {
+          level: "error",
+        });
       }
       super.error(msg, err);
     }

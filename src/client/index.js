@@ -4,36 +4,31 @@ import { Tracker } from 'meteor/tracker';
 
 import bunyan from 'browser-bunyan';
 import Logger from '../Logger';
-import rollbar from './rollbar.umd.nojson';
+import Raven from 'raven-js';
 
 
-const rollbarToken = Meteor.settings &&
-  Meteor.settings.public && Meteor.settings.public.Rollbar &&
-  Meteor.settings.public.Rollbar.post_client_item;
+const token = Meteor.settings &&
+  Meteor.settings.public && Meteor.settings.public.Sentry &&
+  Meteor.settings.public.Sentry.config;
 
 const environment = Meteor.settings && Meteor.settings.public &&
   Meteor.settings.public.environment;
 
-const rollbarConfig = {
-  accessToken: rollbarToken,
-  captureUncaught: true,
-  payload: {
-    environment: environment,
-  }
+const config = {
+  environment,
 };
 
-let Rollbar = rollbar.init(rollbarConfig);
+Raven.config(token, config).install();
 
 Tracker.autorun(function() {
   const userId = Meteor.userId();
   const user = Meteor.users.findOne({ _id: userId, }, { fields: { username: 1 } });
   if (user) {
-    rollbarConfig.payload.person = {
+    const person = {
       id: user._id,
       username: user.username
     };
-    console.log(`User changed, configuring rollbar with ${user._id} and ${user.username}`);
-    Rollbar.configure(rollbarConfig);
+    Raven.setUserContext(person);
   }
 });
 
@@ -60,22 +55,114 @@ const log = bunyan.createLogger({
   }]
 });
 
-class LoggerClient extends Logger {
-  error(msg, err) {
-    if (_.isObject(msg)) {
-      Rollbar.error(msg.msg, msg.err);
-    } else if (err) {
-      Rollbar.error(msg, err);
-    } else {
-      Rollbar.error(msg);
+const transformError = (err) => {
+  if (typeof err === 'string') {
+    return new Error(err);
+  } else if (err instanceof Error) {
+    return err;
+  } else {
+    let errObj;
+    if (err.message) {
+      errObj = new Error(err.message);
+      if (err.stack) {
+        errObj.stack = err.stack;
+      }
+
+      return errObj;
     }
+    // otherwise, wtf is err
+  }
+}
+
+const transformMessage = (msg) => {
+  if (typeof msg === 'string') {
+    return {
+      message: msg,
+      context: {},
+    };
+  }
+
+  const {
+    msg: message,
+    ...other,
+  } = msg;
+
+  if (message) {
+    return {
+      message: message || '',
+      context: other || {},
+    }
+  }
+};
+
+const captureMessage = (level, msg, context, { quiet } = {}) => {
+  if (!quiet) {
+    const msgObj = transformMessage(msg);
+    Raven.captureMessage(msgObj.message, {
+      level,
+      extra: {
+        ...context,
+        ...msgObj.context,
+      },
+    });
+  }
+}
+
+class LoggerClient extends Logger {
+  error(msg, err, { quiet } = {}) {
+    if (!quiet) {
+      if (typeof msg === 'string') {
+        if (!err) {
+          Raven.captureException(new Error(msg));
+        } else {
+          Raven.captureException(transformError(err), {
+            extra: {
+              msg,
+            },
+          });
+        }
+      } else if (msg) {
+        const {
+          msg: message,
+          err,
+          ...other,
+        } = msg;
+
+        let errObj;
+        if (!err && typeof message === 'string') {
+          errObj = new Error(message);
+        } else {
+          errObj = transformError(err);
+        }
+
+        Raven.captureException(errObj, {
+          extra: {
+            ...other,
+            message,
+          },
+        });
+      }
+    }
+
     super.error(msg, err);
+  }
+
+  info(msg, ...args) {
+    super.info(msg);
+  }
+
+  warn(msg, ...args) {
+    captureMessage('warning', msg, ...args);
+    super.warn(msg);
   }
 }
 
 const logger = new LoggerClient(log);
 
+window.Raven = Raven;
+window.logger = logger;
+
 export {
   logger,
-  Rollbar,
+  Raven,
 };
